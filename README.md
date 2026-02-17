@@ -9,6 +9,8 @@ One command to list all globally installed npm, pnpm, and yarn packages — with
 + globox
 ```
 
+<img width="566" height="692" alt="Screenshot 2026-02-17 at 8 35 54 AM" src="https://github.com/user-attachments/assets/2a75cb43-2f87-474f-9b40-a1a3a5401256" />
+
 ## Quick Start
 
 ```bash
@@ -23,6 +25,8 @@ globox -d
 ```
 
 That's it. globox auto-detects which package managers you have and aggregates everything into one view.
+<img width="1927" height="1451" alt="image" src="https://github.com/user-attachments/assets/568ca930-63d2-446f-86cf-89fef16d4d88" />
+
 
 ## Why
 
