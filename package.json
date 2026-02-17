@@ -1,0 +1,38 @@
+{
+  "name": "globox",
+  "version": "1.0.1",
+  "description": "One command to list all globally installed npm, pnpm, and yarn packages — with an optional dashboard.",
+  "type": "module",
+  "bin": {
+    "globox": "./bin/globox.js"
+  },
+  "main": "./src/index.js",
+  "scripts": {
+    "start": "node bin/globox.js",
+    "test": "node bin/globox.js"
+  },
+  "keywords": [
+    "cli",
+    "npm",
+    "pnpm",
+    "yarn",
+    "global",
+    "packages",
+    "dashboard",
+    "list",
+    "package-manager"
+  ],
+  "author": "",
+  "license": "MIT",
+  "dependencies": {
+    "chalk": "^5.4.1",
+    "cli-table3": "^0.6.5",
+    "commander": "^13.1.0",
+    "execa": "^9.5.2",
+    "open": "^10.1.0",
+    "ora": "^8.2.0"
+  },
+  "engines": {
+    "node": ">=18.0.0"
+  }
+}
