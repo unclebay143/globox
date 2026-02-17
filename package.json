@@ -1,6 +1,6 @@
 {
   "name": "globox",
-  "version": "1.0.2",
+  "version": "1.0.3",
   "description": "One command to list all globally installed npm, pnpm, and yarn packages — with an optional dashboard.",
   "type": "module",
   "bin": {
