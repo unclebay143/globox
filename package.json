@@ -22,8 +22,16 @@
     "list",
     "package-manager"
   ],
-  "author": "",
+  "author": "Uncle BigBay",
   "license": "MIT",
+  "repository": {
+    "type": "git",
+    "url": "https://github.com/unclebay143/globox.git"
+  },
+  "homepage": "https://github.com/unclebay143/globox",
+  "bugs": {
+    "url": "https://github.com/unclebay143/globox/issues"
+  },
   "dependencies": {
     "chalk": "^5.4.1",
     "cli-table3": "^0.6.5",
