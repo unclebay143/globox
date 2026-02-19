@@ -1,4 +1,4 @@
-# Globox
+# globox
 
 One command to list all globally installed npm, pnpm, and yarn packages — with an optional dashboard.
 
