@@ -9,7 +9,7 @@ One command to list all globally installed npm, pnpm, and yarn packages — with
 + globox
 ```
 
-<img width="566" height="692" alt="Screenshot 2026-02-17 at 8 35 54 AM" src="https://github.com/user-attachments/assets/2a75cb43-2f87-474f-9b40-a1a3a5401256" />
+<img width="759" height="894" alt="image" src="https://github.com/user-attachments/assets/72692b20-888b-4cf3-84e3-b4fb8771efea" />
 
 ## Quick Start
 
@@ -22,10 +22,18 @@ globox
 
 # Open the interactive dashboard
 globox -d
+
+✔ Found npm v10.8.2, pnpm v9.15.4, yarn v4.9.1
+✔ Found 15 global packages
+✔ Size calculation complete
+
+  Dashboard running at http://127.0.0.1:60776
+  Press Ctrl+C to stop and clean up
 ```
 
 That's it. globox auto-detects which package managers you have and aggregates everything into one view.
-<img width="1927" height="1451" alt="image" src="https://github.com/user-attachments/assets/568ca930-63d2-446f-86cf-89fef16d4d88" />
+<img width="1134" height="993" alt="image" src="https://github.com/user-attachments/assets/af97675f-bcc7-4dcd-8eab-e332eee2f60f" />
+<img width="1148" height="993" alt="image" src="https://github.com/user-attachments/assets/33c24b5e-4e77-4d31-86d3-bd9a30cb9593" />
 
 
 ## Why
