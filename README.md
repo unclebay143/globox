@@ -33,6 +33,9 @@ globox -d
 
 That's it. globox auto-detects which package managers you have and aggregates everything into one view.
 <img width="1134" height="993" alt="image" src="https://github.com/user-attachments/assets/af97675f-bcc7-4dcd-8eab-e332eee2f60f" />
+
+Dark mode:
+
 <img width="1148" height="993" alt="image" src="https://github.com/user-attachments/assets/33c24b5e-4e77-4d31-86d3-bd9a30cb9593" />
 
 
