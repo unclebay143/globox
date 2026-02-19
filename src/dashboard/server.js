@@ -1,11 +1,11 @@
-import { createServer } from "node:http";
-import { readFile } from "node:fs/promises";
-import { fileURLToPath } from "node:url";
-import { dirname, join } from "node:path";
-import open from "open";
 import chalk from "chalk";
-import { checkOutdated } from "../outdated.js";
+import { readFile } from "node:fs/promises";
+import { createServer } from "node:http";
+import { dirname, join } from "node:path";
+import { fileURLToPath } from "node:url";
+import open from "open";
 import { MANAGER_ORDER } from "../constants.js";
+import { checkOutdated } from "../outdated.js";
 
 const __filename = fileURLToPath(import.meta.url);
 const __dirname = dirname(__filename);
@@ -14,7 +14,11 @@ const __dirname = dirname(__filename);
  * Start a temporary dashboard server and open it in the browser.
  * Returns a cleanup function to shut down the server.
  */
-export async function startDashboard(packages, managers, { outdated = false } = {}) {
+export async function startDashboard(
+  packages,
+  managers,
+  { outdated = false } = {},
+) {
   const templatePath = join(__dirname, "template.html");
   let html = await readFile(templatePath, "utf-8");
 
@@ -26,7 +30,14 @@ export async function startDashboard(packages, managers, { outdated = false } = 
     outdatedPreloaded: outdated,
   });
 
-  html = html.replace("__GLOBOX_DATA__", payload);
+  // Escape for embedding inside a double-quoted JS string (avoid breaking JSON.parse("..."))
+  const escapedPayload = payload
+    .replace(/\\/g, "\\\\")
+    .replace(/"/g, '\\"')
+    .replace(/\u2028/g, "\\u2028")
+    .replace(/\u2029/g, "\\u2029");
+
+  html = html.replace("__GLOBOX_DATA__", escapedPayload);
 
   let outdatedCache = null;
 
@@ -58,9 +69,7 @@ export async function startDashboard(packages, managers, { outdated = false } = 
       const url = `http://127.0.0.1:${port}`;
 
       console.log(
-        chalk.cyan(
-          `\n  Dashboard running at ${chalk.bold.underline(url)}`
-        )
+        chalk.cyan(`\n  Dashboard running at ${chalk.bold.underline(url)}`),
       );
       console.log(chalk.gray("  Press Ctrl+C to stop and clean up\n"));
 

@@ -1,380 +1,520 @@
-<!DOCTYPE html>
+<!doctype html>
 <html lang="en">
-<head>
-  <meta charset="UTF-8" />
-  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
-  <title>globox — Global Packages Dashboard</title>
-  <style>
-    :root {
-      --bg: #0f1117;
-      --surface: #1a1d27;
-      --surface-hover: #222633;
-      --border: #2a2e3d;
-      --text: #e4e6f0;
-      --text-muted: #8b8fa3;
-      --accent: #7c5cfc;
-      --npm: #cb3837;
-      --pnpm: #f9ad00;
-      --yarn: #2c8ebb;
-      --green: #22c55e;
-      --cyan: #67e8f9;
-      --radius: 12px;
-    }
+  <head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <title>Globox — Global Packages Dashboard</title>
+    <style>
+      :root {
+        --bg: #0f1117;
+        --surface: #1a1d27;
+        --surface-hover: #222633;
+        --border: #2a2e3d;
+        --text: #e4e6f0;
+        --text-muted: #8b8fa3;
+        --accent: #7c5cfc;
+        --npm: #cb3837;
+        --pnpm: #f9ad00;
+        --yarn: #2c8ebb;
+        --green: #22c55e;
+        --cyan: #67e8f9;
+        --radius: 12px;
+      }
 
-    * { margin: 0; padding: 0; box-sizing: border-box; }
+      * {
+        margin: 0;
+        padding: 0;
+        box-sizing: border-box;
+      }
 
-    body {
-      font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, 'Helvetica Neue', sans-serif;
-      background: var(--bg);
-      color: var(--text);
-      min-height: 100vh;
-      line-height: 1.6;
-    }
+      body {
+        font-family:
+          -apple-system, BlinkMacSystemFont, "Segoe UI", Roboto,
+          "Helvetica Neue", sans-serif;
+        background: var(--bg);
+        color: var(--text);
+        min-height: 100vh;
+        line-height: 1.6;
+      }
 
-    .container {
-      max-width: 960px;
-      margin: 0 auto;
-      padding: 40px 24px;
-    }
+      .container {
+        max-width: 960px;
+        margin: 0 auto;
+        padding: 40px 24px;
+      }
 
-    header {
-      text-align: center;
-      margin-bottom: 40px;
-    }
+      header {
+        position: relative;
+        text-align: center;
+        margin-bottom: 40px;
+      }
 
-    header h1 {
-      font-size: 2rem;
-      font-weight: 700;
-      letter-spacing: -0.5px;
-      margin-bottom: 4px;
-    }
+      header h1 {
+        font-size: 4rem;
+        font-weight: 700;
+        letter-spacing: -0.5px;
+        margin-bottom: 4px;
+      }
 
-    header h1 span {
-      background: linear-gradient(135deg, var(--accent), #a78bfa);
-      -webkit-background-clip: text;
-      -webkit-text-fill-color: transparent;
-      background-clip: text;
-    }
+      header h1 span {
+        background: linear-gradient(135deg, var(--accent), #a78bfa);
+        -webkit-background-clip: text;
+        -webkit-text-fill-color: transparent;
+        background-clip: text;
+        filter: drop-shadow(0 0 11px rgba(124, 92, 252, 0.6))
+          drop-shadow(0 0 22px rgba(124, 92, 252, 0.4));
+      }
 
-    header p {
-      color: var(--text-muted);
-      font-size: 0.95rem;
-    }
+      header p {
+        color: #9ca3af;
+        font-size: 0.95rem;
+      }
 
-    .stats {
-      display: grid;
-      grid-template-columns: repeat(3, 1fr);
-      gap: 16px;
-      margin-bottom: 32px;
-    }
+      .stats {
+        display: grid;
+        grid-template-columns: repeat(3, 1fr);
+        gap: 16px;
+        margin-bottom: 32px;
+      }
 
-    .stat-card {
-      background: var(--surface);
-      border: 1px solid var(--border);
-      border-radius: var(--radius);
-      padding: 20px;
-      text-align: center;
-    }
+      .stat-card {
+        background: var(--surface);
+        border: 1px solid var(--border);
+        border-radius: var(--radius);
+        padding: 20px;
+        text-align: center;
+      }
 
-    .stat-card .number {
-      font-size: 2rem;
-      font-weight: 700;
-      margin-bottom: 2px;
-    }
+      .stat-card .number {
+        font-size: 2rem;
+        font-weight: 700;
+        margin-bottom: 2px;
+      }
 
-    .stat-card .label {
-      color: var(--text-muted);
-      font-size: 0.85rem;
-      text-transform: uppercase;
-      letter-spacing: 0.5px;
-    }
+      .stat-card .label {
+        color: var(--text-muted);
+        font-size: 0.85rem;
+        text-transform: uppercase;
+        letter-spacing: 0.5px;
+      }
 
-    .controls {
-      display: flex;
-      gap: 12px;
-      margin-bottom: 24px;
-      flex-wrap: wrap;
-    }
+      .controls {
+        display: flex;
+        gap: 12px;
+        margin-bottom: 24px;
+        flex-wrap: wrap;
+      }
 
-    .search-box {
-      flex: 1;
-      min-width: 200px;
-      padding: 10px 16px;
-      background: var(--surface);
-      border: 1px solid var(--border);
-      border-radius: var(--radius);
-      color: var(--text);
-      font-size: 0.95rem;
-      outline: none;
-      transition: border-color 0.2s;
-    }
+      .search-box {
+        flex: 1;
+        min-width: 200px;
+        padding: 10px 16px;
+        background: var(--surface);
+        border: 1px solid var(--border);
+        border-radius: var(--radius);
+        color: var(--text);
+        font-size: 0.95rem;
+        outline: none;
+        transition: border-color 0.2s;
+      }
 
-    .search-box:focus {
-      border-color: var(--accent);
-    }
+      .search-box:focus {
+        border-color: var(--accent);
+      }
 
-    .search-box::placeholder {
-      color: var(--text-muted);
-    }
+      .search-box::placeholder {
+        color: var(--text-muted);
+      }
 
-    .filter-btn {
-      padding: 10px 20px;
-      border-radius: var(--radius);
-      border: 1px solid var(--border);
-      background: var(--surface);
-      color: var(--text-muted);
-      cursor: pointer;
-      font-size: 0.9rem;
-      transition: all 0.2s;
-    }
+      .filter-btn {
+        padding: 10px 20px;
+        border-radius: var(--radius);
+        border: 1px solid var(--border);
+        background: var(--surface);
+        color: var(--text-muted);
+        cursor: pointer;
+        font-size: 0.9rem;
+        transition: all 0.2s;
+      }
 
-    .filter-btn:hover {
-      background: var(--surface-hover);
-      color: var(--text);
-    }
+      .filter-btn:hover {
+        background: var(--surface-hover);
+        color: var(--text);
+      }
 
-    .filter-btn.active {
-      border-color: var(--accent);
-      color: var(--accent);
-      background: rgba(124, 92, 252, 0.1);
-    }
+      .filter-btn.active {
+        border-color: var(--accent);
+        color: var(--accent);
+        background: rgba(124, 92, 252, 0.1);
+      }
 
-    .filter-btn.npm.active { border-color: var(--npm); color: var(--npm); background: rgba(203, 56, 55, 0.1); }
-    .filter-btn.pnpm.active { border-color: var(--pnpm); color: var(--pnpm); background: rgba(249, 173, 0, 0.1); }
-    .filter-btn.yarn.active { border-color: var(--yarn); color: var(--yarn); background: rgba(44, 142, 187, 0.1); }
+      .filter-btn.npm.active {
+        border-color: var(--npm);
+        color: var(--npm);
+        background: rgba(203, 56, 55, 0.1);
+      }
+      .filter-btn.pnpm.active {
+        border-color: var(--pnpm);
+        color: var(--pnpm);
+        background: rgba(249, 173, 0, 0.1);
+      }
+      .filter-btn.yarn.active {
+        border-color: var(--yarn);
+        color: var(--yarn);
+        background: rgba(44, 142, 187, 0.1);
+      }
 
-    .packages-table {
-      width: 100%;
-      border-collapse: separate;
-      border-spacing: 0;
-      background: var(--surface);
-      border: 1px solid var(--border);
-      border-radius: var(--radius);
-      overflow: hidden;
-    }
+      .packages-table {
+        width: 100%;
+        border-collapse: separate;
+        border-spacing: 0;
+        background: var(--surface);
+        border: 1px solid var(--border);
+        border-radius: var(--radius);
+        overflow: hidden;
+      }
 
-    .packages-table th {
-      text-align: left;
-      padding: 14px 20px;
-      font-size: 0.8rem;
-      text-transform: uppercase;
-      letter-spacing: 0.5px;
-      color: var(--text-muted);
-      border-bottom: 1px solid var(--border);
-      background: var(--surface);
-    }
+      .packages-table th {
+        text-align: left;
+        padding: 14px 20px;
+        font-size: 0.8rem;
+        text-transform: uppercase;
+        letter-spacing: 0.5px;
+        color: var(--text-muted);
+        border-bottom: 1px solid var(--border);
+        background: var(--surface);
+      }
 
-    .packages-table th.sortable {
-      cursor: pointer;
-      user-select: none;
-      transition: color 0.2s;
-    }
+      .packages-table th.sortable {
+        cursor: pointer;
+        user-select: none;
+        transition: color 0.2s;
+      }
 
-    .packages-table th.sortable:hover {
-      color: var(--text);
-    }
+      .packages-table th.sortable:hover {
+        color: var(--text);
+      }
 
-    .packages-table th.sortable.active-sort {
-      color: var(--accent);
-    }
+      .packages-table th.sortable.active-sort {
+        color: var(--accent);
+      }
 
-    .sort-arrow {
-      margin-left: 4px;
-      font-size: 0.7rem;
-    }
+      .sort-arrow {
+        margin-left: 4px;
+        font-size: 0.7rem;
+      }
 
-    .packages-table td {
-      padding: 12px 20px;
-      border-bottom: 1px solid var(--border);
-      font-size: 0.95rem;
-    }
+      .packages-table td {
+        padding: 12px 20px;
+        border-bottom: 1px solid var(--border);
+        font-size: 0.95rem;
+      }
 
-    .packages-table tr:last-child td {
-      border-bottom: none;
-    }
+      .packages-table tr:last-child td {
+        border-bottom: none;
+      }
 
-    .packages-table tbody tr {
-      transition: background 0.15s;
-    }
+      .packages-table tbody tr {
+        transition: background 0.15s;
+      }
 
-    .packages-table tbody tr:hover {
-      background: var(--surface-hover);
-    }
+      .packages-table tbody tr:hover {
+        background: var(--surface-hover);
+      }
 
-    .pkg-name {
-      font-weight: 600;
-    }
+      .pkg-name {
+        font-weight: 600;
+      }
 
-    .pkg-version, .pkg-size {
-      font-family: 'SF Mono', 'Fira Code', 'Cascadia Code', monospace;
-      color: var(--text-muted);
-      font-size: 0.9rem;
-    }
+      .pkg-version,
+      .pkg-size {
+        font-family: "SF Mono", "Fira Code", "Cascadia Code", monospace;
+        color: var(--text-muted);
+        font-size: 0.9rem;
+      }
 
-    .pkg-size {
-      color: var(--cyan);
-    }
+      .pkg-size {
+        color: var(--cyan);
+      }
 
-    .pkg-latest {
-      font-family: 'SF Mono', 'Fira Code', 'Cascadia Code', monospace;
-      font-size: 0.9rem;
-    }
+      .pkg-latest {
+        font-family: "SF Mono", "Fira Code", "Cascadia Code", monospace;
+        font-size: 0.9rem;
+      }
 
-    .pkg-latest.outdated {
-      color: var(--npm);
-    }
+      .pkg-latest.outdated {
+        color: var(--npm);
+      }
 
-    .pkg-latest.up-to-date {
-      color: var(--green);
-    }
+      .pkg-latest.up-to-date {
+        color: var(--green);
+      }
 
-    .pkg-latest.pending {
-      color: var(--text-muted);
-    }
+      .pkg-latest.pending {
+        color: var(--text-muted);
+      }
 
-    .update-btn {
-      padding: 10px 20px;
-      border-radius: var(--radius);
-      border: 1px solid var(--green);
-      background: rgba(34, 197, 94, 0.1);
-      color: var(--green);
-      cursor: pointer;
-      font-size: 0.9rem;
-      transition: all 0.2s;
-      white-space: nowrap;
-    }
+      .update-btn {
+        padding: 10px 20px;
+        border-radius: var(--radius);
+        border: 1px solid var(--green);
+        background: rgba(34, 197, 94, 0.1);
+        color: var(--green);
+        cursor: pointer;
+        font-size: 0.9rem;
+        transition: all 0.2s;
+        white-space: nowrap;
+      }
 
-    .update-btn:hover {
-      background: rgba(34, 197, 94, 0.2);
-    }
+      .update-btn:hover {
+        background: rgba(34, 197, 94, 0.2);
+      }
 
-    .update-btn:disabled {
-      opacity: 0.5;
-      cursor: not-allowed;
-    }
+      .update-btn:disabled {
+        opacity: 0.5;
+        cursor: not-allowed;
+      }
 
-    .update-btn.loading {
-      border-color: var(--text-muted);
-      color: var(--text-muted);
-      background: rgba(139, 143, 163, 0.1);
-    }
+      .update-btn.loading {
+        border-color: var(--text-muted);
+        color: var(--text-muted);
+        background: rgba(139, 143, 163, 0.1);
+      }
 
-    .badge {
-      display: inline-block;
-      padding: 3px 10px;
-      border-radius: 20px;
-      font-size: 0.8rem;
-      font-weight: 600;
-      letter-spacing: 0.3px;
-    }
+      .badge {
+        display: inline-block;
+        padding: 3px 10px;
+        border-radius: 20px;
+        font-size: 0.8rem;
+        font-weight: 600;
+        letter-spacing: 0.3px;
+      }
 
-    .badge.npm { background: rgba(203, 56, 55, 0.15); color: var(--npm); }
-    .badge.pnpm { background: rgba(249, 173, 0, 0.15); color: var(--pnpm); }
-    .badge.yarn { background: rgba(44, 142, 187, 0.15); color: var(--yarn); }
+      .badge.npm {
+        background: rgba(203, 56, 55, 0.15);
+        color: var(--npm);
+      }
+      .badge.pnpm {
+        background: rgba(249, 173, 0, 0.15);
+        color: var(--pnpm);
+      }
+      .badge.yarn {
+        background: rgba(44, 142, 187, 0.15);
+        color: var(--yarn);
+      }
 
-    .empty-state {
-      text-align: center;
-      padding: 60px 20px;
-      color: var(--text-muted);
-    }
+      .empty-state {
+        text-align: center;
+        padding: 60px 20px;
+        color: var(--text-muted);
+      }
 
-    .empty-state .icon {
-      font-size: 2.5rem;
-      margin-bottom: 12px;
-    }
+      .empty-state .icon {
+        font-size: 2.5rem;
+        margin-bottom: 12px;
+      }
 
-    footer {
-      text-align: center;
-      margin-top: 40px;
-      color: var(--text-muted);
-      font-size: 0.85rem;
-    }
+      footer {
+        text-align: center;
+        margin-top: 40px;
+        color: var(--text-muted);
+        font-size: 0.85rem;
+      }
 
-    footer a {
-      color: var(--accent);
-      text-decoration: none;
-    }
+      footer a {
+        color: var(--accent);
+        text-decoration: none;
+      }
 
-    @media (max-width: 600px) {
-      .container { padding: 24px 16px; }
-      header h1 { font-size: 1.5rem; }
-      .stats { grid-template-columns: 1fr 1fr; }
-      .packages-table th, .packages-table td { padding: 10px 14px; }
-    }
-  </style>
-</head>
-<body>
-  <div class="container">
-    <header>
-      <h1><span>globox</span></h1>
-      <p>Global Packages Dashboard</p>
-    </header>
+      /* Light theme */
+      [data-theme="light"] {
+        --bg: #f8fafc;
+        --surface: #ffffff;
+        --surface-hover: #f1f5f9;
+        --border: #e2e8f0;
+        --text: #1e293b;
+        --text-muted: #64748b;
+      }
 
-    <div class="stats" id="stats"></div>
+      [data-theme="light"] header p {
+        color: #475569;
+      }
 
-    <div class="controls">
-      <input
-        type="text"
-        class="search-box"
-        id="search"
-        placeholder="Search packages..."
-        autocomplete="off"
-      />
-      <button class="filter-btn active" data-filter="all">All</button>
-      <button class="update-btn" id="check-updates-btn">Check for updates</button>
+      [data-theme="light"] header h1 span {
+        filter: drop-shadow(0 0 11px rgba(124, 92, 252, 0.35))
+          drop-shadow(0 0 22px rgba(124, 92, 252, 0.2));
+      }
+
+      [data-theme="light"] .pkg-size {
+        color: #0d9488;
+      }
+
+      .theme-toggle {
+        position: absolute;
+        top: 24px;
+        right: 24px;
+        width: 40px;
+        height: 40px;
+        padding: 0;
+        border: 1px solid var(--border);
+        border-radius: var(--radius);
+        background: var(--surface);
+        color: var(--text-muted);
+        cursor: pointer;
+        font-size: 1.25rem;
+        display: flex;
+        align-items: center;
+        justify-content: center;
+        transition: all 0.2s;
+      }
+
+      .theme-toggle:hover {
+        background: var(--surface-hover);
+        color: var(--text);
+      }
+
+      @media (max-width: 600px) {
+        .container {
+          padding: 24px 16px;
+        }
+        .theme-toggle {
+          top: 16px;
+          right: 16px;
+        }
+        header h1 {
+          font-size: 1.5rem;
+        }
+        .stats {
+          grid-template-columns: 1fr 1fr;
+        }
+        .packages-table th,
+        .packages-table td {
+          padding: 10px 14px;
+        }
+      }
+    </style>
+    <script>
+      (function () {
+        var stored = localStorage.getItem("globox-theme");
+        var prefersLight = window.matchMedia && window.matchMedia("(prefers-color-scheme: light)").matches;
+        var theme = stored === "light" || stored === "dark" ? stored : prefersLight ? "light" : "dark";
+        document.documentElement.setAttribute("data-theme", theme);
+      })();
+    </script>
+  </head>
+  <body>
+    <div class="container">
+      <header>
+        <button type="button" class="theme-toggle" id="theme-toggle" aria-label="Toggle theme" title="Toggle theme">🌙</button>
+        <h1><span>Globox</span></h1>
+        <p>Global Packages Dashboard</p>
+      </header>
+
+      <div class="stats" id="stats"></div>
+
+      <div class="controls">
+        <input
+          type="text"
+          class="search-box"
+          id="search"
+          placeholder="Search packages..."
+          autocomplete="off"
+        />
+        <button class="filter-btn active" data-filter="all">All</button>
+        <button class="update-btn" id="check-updates-btn">
+          Check for updates
+        </button>
+      </div>
+
+      <table class="packages-table">
+        <thead>
+          <tr>
+            <th class="sortable" data-sort="name">
+              Package<span class="sort-arrow"></span>
+            </th>
+            <th>Version</th>
+            <th class="latest-col" style="display: none">Latest</th>
+            <th class="sortable" data-sort="size">
+              Size<span class="sort-arrow"></span>
+            </th>
+            <th class="sortable" data-sort="manager">
+              Manager<span class="sort-arrow"></span>
+            </th>
+          </tr>
+        </thead>
+        <tbody id="table-body"></tbody>
+      </table>
+
+      <footer>
+        <p>
+          Generated by
+          <a
+            href="https://github.com/unclebay143/globox"
+            target="_blank"
+            rel="noopener noreferrer"
+            >Globox</a
+          >
+          &middot; <span id="timestamp"></span>
+        </p>
+      </footer>
     </div>
 
-    <table class="packages-table">
-      <thead>
-        <tr>
-          <th class="sortable" data-sort="name">Package<span class="sort-arrow"></span></th>
-          <th>Version</th>
-          <th class="latest-col" style="display:none">Latest</th>
-          <th class="sortable" data-sort="size">Size<span class="sort-arrow"></span></th>
-          <th class="sortable" data-sort="manager">Manager<span class="sort-arrow"></span></th>
-        </tr>
-      </thead>
-      <tbody id="table-body"></tbody>
-    </table>
+    <script>
+      const DATA = JSON.parse("__GLOBOX_DATA__");
+      const {
+        packages,
+        managers,
+        managerOrder,
+        generatedAt,
+        outdatedPreloaded,
+      } = DATA;
 
-    <footer>
-      <p>Generated by <a href="https://github.com/unclebay143/globox" target="_blank" rel="noopener noreferrer">globox</a> &middot; <span id="timestamp"></span></p>
-    </footer>
-  </div>
+      let activeFilter = "all";
+      let searchQuery = "";
+      let showLatest = false;
+      let sortField = "manager";
+      let sortDir = "asc";
 
-  <script>
-    const DATA = JSON.parse('__GLOBOX_DATA__');
-    const { packages, managers, managerOrder, generatedAt, outdatedPreloaded } = DATA;
+      (function initThemeToggle() {
+        var toggle = document.getElementById("theme-toggle");
+        function setIcon() {
+          var theme = document.documentElement.getAttribute("data-theme");
+          toggle.textContent = theme === "light" ? "\u263C" : "\u263E";
+          toggle.setAttribute("aria-label", theme === "light" ? "Switch to dark mode" : "Switch to light mode");
+        }
+        setIcon();
+        toggle.addEventListener("click", function () {
+          var theme = document.documentElement.getAttribute("data-theme");
+          var next = theme === "light" ? "dark" : "light";
+          document.documentElement.setAttribute("data-theme", next);
+          localStorage.setItem("globox-theme", next);
+          setIcon();
+        });
+      })();
 
-    let activeFilter = 'all';
-    let searchQuery = '';
-    let showLatest = false;
-    let sortField = 'manager';
-    let sortDir = 'asc';
+      function formatSize(bytes) {
+        if (!bytes || bytes === 0) return "0 B";
+        const units = ["B", "KB", "MB", "GB"];
+        const i = Math.floor(Math.log(bytes) / Math.log(1024));
+        const value = bytes / Math.pow(1024, i);
+        return value.toFixed(i > 0 ? 1 : 0) + " " + units[i];
+      }
 
-    function formatSize(bytes) {
-      if (!bytes || bytes === 0) return '0 B';
-      const units = ['B', 'KB', 'MB', 'GB'];
-      const i = Math.floor(Math.log(bytes) / Math.log(1024));
-      const value = bytes / Math.pow(1024, i);
-      return value.toFixed(i > 0 ? 1 : 0) + ' ' + units[i];
-    }
+      function getColspan() {
+        return showLatest ? 5 : 4;
+      }
 
-    function getColspan() {
-      return showLatest ? 5 : 4;
-    }
+      // Stats
+      function renderStats() {
+        const statsEl = document.getElementById("stats");
+        const total = packages.length;
+        const totalSize = packages.reduce((sum, p) => sum + (p.size || 0), 0);
+        const managerCounts = {};
+        packages.forEach((p) => {
+          managerCounts[p.manager] = (managerCounts[p.manager] || 0) + 1;
+        });
 
-    // Stats
-    function renderStats() {
-      const statsEl = document.getElementById('stats');
-      const total = packages.length;
-      const totalSize = packages.reduce((sum, p) => sum + (p.size || 0), 0);
-      const managerCounts = {};
-      packages.forEach(p => {
-        managerCounts[p.manager] = (managerCounts[p.manager] || 0) + 1;
-      });
-
-      let html = `
+        let html = `
         <div class="stat-card">
           <div class="number">${total}</div>
           <div class="label">Total Packages</div>
@@ -389,90 +529,94 @@
         </div>
       `;
 
-      managers.forEach(m => {
-        html += `
+        managers.forEach((m) => {
+          html += `
           <div class="stat-card">
             <div class="number">${managerCounts[m.name] || 0}</div>
             <div class="label">${m.name} v${m.version}</div>
           </div>
         `;
-      });
+        });
 
-      statsEl.innerHTML = html;
-    }
-
-    // Filter buttons
-    function renderFilters() {
-      const controls = document.querySelector('.controls');
-      managers.forEach(m => {
-        const btn = document.createElement('button');
-        btn.className = `filter-btn ${m.name}`;
-        btn.dataset.filter = m.name;
-        btn.textContent = m.name;
-        controls.appendChild(btn);
-      });
-    }
-
-    // Show/hide latest column
-    function toggleLatestColumn(show) {
-      showLatest = show;
-      document.querySelectorAll('.latest-col').forEach(el => {
-        el.style.display = show ? '' : 'none';
-      });
-    }
-
-    function updateSortIndicators() {
-      document.querySelectorAll('.packages-table th.sortable').forEach(th => {
-        const arrow = th.querySelector('.sort-arrow');
-        if (th.dataset.sort === sortField) {
-          th.classList.add('active-sort');
-          arrow.textContent = sortDir === 'asc' ? ' ▲' : ' ▼';
-        } else {
-          th.classList.remove('active-sort');
-          arrow.textContent = '';
-        }
-      });
-    }
-
-    function sortPackages(list) {
-      return [...list].sort((a, b) => {
-        let cmp = 0;
-        switch (sortField) {
-          case 'size':
-            cmp = (a.size || 0) - (b.size || 0);
-            break;
-          case 'manager':
-            cmp = (managerOrder[a.manager] ?? 99) - (managerOrder[b.manager] ?? 99);
-            if (cmp === 0) cmp = a.name.localeCompare(b.name);
-            break;
-          case 'name':
-          default:
-            cmp = a.name.localeCompare(b.name);
-            break;
-        }
-        return sortDir === 'asc' ? cmp : -cmp;
-      });
-    }
-
-    // Table
-    function renderTable() {
-      const tbody = document.getElementById('table-body');
-      let filtered = packages;
-
-      if (activeFilter !== 'all') {
-        filtered = filtered.filter(p => p.manager === activeFilter);
+        statsEl.innerHTML = html;
       }
 
-      if (searchQuery) {
-        const q = searchQuery.toLowerCase();
-        filtered = filtered.filter(p => p.name.toLowerCase().includes(q));
+      // Filter buttons
+      function renderFilters() {
+        const controls = document.querySelector(".controls");
+        managers.forEach((m) => {
+          const btn = document.createElement("button");
+          btn.className = `filter-btn ${m.name}`;
+          btn.dataset.filter = m.name;
+          btn.textContent = m.name;
+          controls.appendChild(btn);
+        });
       }
 
-      filtered = sortPackages(filtered);
-      updateSortIndicators();
+      // Show/hide latest column
+      function toggleLatestColumn(show) {
+        showLatest = show;
+        document.querySelectorAll(".latest-col").forEach((el) => {
+          el.style.display = show ? "" : "none";
+        });
+      }
 
-      if (filtered.length === 0) {
-        tbody.innerHTML = `
+      function updateSortIndicators() {
+        document
+          .querySelectorAll(".packages-table th.sortable")
+          .forEach((th) => {
+            const arrow = th.querySelector(".sort-arrow");
+            if (th.dataset.sort === sortField) {
+              th.classList.add("active-sort");
+              arrow.textContent = sortDir === "asc" ? " ▲" : " ▼";
+            } else {
+              th.classList.remove("active-sort");
+              arrow.textContent = "";
+            }
+          });
+      }
+
+      function sortPackages(list) {
+        return [...list].sort((a, b) => {
+          let cmp = 0;
+          switch (sortField) {
+            case "size":
+              cmp = (a.size || 0) - (b.size || 0);
+              break;
+            case "manager":
+              cmp =
+                (managerOrder[a.manager] ?? 99) -
+                (managerOrder[b.manager] ?? 99);
+              if (cmp === 0) cmp = a.name.localeCompare(b.name);
+              break;
+            case "name":
+            default:
+              cmp = a.name.localeCompare(b.name);
+              break;
+          }
+          return sortDir === "asc" ? cmp : -cmp;
+        });
+      }
+
+      // Table
+      function renderTable() {
+        const tbody = document.getElementById("table-body");
+        let filtered = packages;
+
+        if (activeFilter !== "all") {
+          filtered = filtered.filter((p) => p.manager === activeFilter);
+        }
+
+        if (searchQuery) {
+          const q = searchQuery.toLowerCase();
+          filtered = filtered.filter((p) => p.name.toLowerCase().includes(q));
+        }
+
+        filtered = sortPackages(filtered);
+        updateSortIndicators();
+
+        if (filtered.length === 0) {
+          tbody.innerHTML = `
           <tr>
             <td colspan="${getColspan()}">
               <div class="empty-state">
@@ -482,20 +626,21 @@
             </td>
           </tr>
         `;
-        return;
-      }
-
-      tbody.innerHTML = filtered.map(p => {
-        let latestCell = '';
-        if (showLatest) {
-          if (p.latest) {
-            const isOutdated = p.version !== p.latest;
-            latestCell = `<td class="latest-col pkg-latest ${isOutdated ? 'outdated' : 'up-to-date'}">${escapeHtml(p.latest)}</td>`;
-          } else {
-            latestCell = `<td class="latest-col pkg-latest pending">—</td>`;
-          }
+          return;
         }
-        return `
+
+        tbody.innerHTML = filtered
+          .map((p) => {
+            let latestCell = "";
+            if (showLatest) {
+              if (p.latest) {
+                const isOutdated = p.version !== p.latest;
+                latestCell = `<td class="latest-col pkg-latest ${isOutdated ? "outdated" : "up-to-date"}">${escapeHtml(p.latest)}</td>`;
+              } else {
+                latestCell = `<td class="latest-col pkg-latest pending">—</td>`;
+              }
+            }
+            return `
           <tr>
             <td class="pkg-name">${escapeHtml(p.name)}</td>
             <td class="pkg-version">${escapeHtml(p.version)}</td>
@@ -504,114 +649,126 @@
             <td><span class="badge ${p.manager}">${p.manager}</span></td>
           </tr>
         `;
-      }).join('');
-    }
-
-    function escapeHtml(str) {
-      const div = document.createElement('div');
-      div.textContent = str;
-      return div.innerHTML;
-    }
-
-    // Check for updates
-    async function checkForUpdates() {
-      const btn = document.getElementById('check-updates-btn');
-      btn.disabled = true;
-      btn.classList.add('loading');
-      btn.textContent = 'Checking...';
-
-      try {
-        const res = await fetch('/api/outdated');
-        const enriched = await res.json();
-
-        if (enriched.error) {
-          btn.textContent = 'Failed — retry';
-          btn.disabled = false;
-          btn.classList.remove('loading');
-          return;
-        }
-
-        enriched.forEach(ep => {
-          const pkg = packages.find(p => p.name === ep.name && p.manager === ep.manager);
-          if (pkg) {
-            pkg.latest = ep.latest;
-          }
-        });
-
-        toggleLatestColumn(true);
-        renderStats();
-        renderTable();
-
-        const outdatedCount = packages.filter(p => p.latest && p.version !== p.latest).length;
-        btn.classList.remove('loading');
-        if (outdatedCount > 0) {
-          btn.textContent = `${outdatedCount} outdated`;
-          btn.style.borderColor = 'var(--npm)';
-          btn.style.color = 'var(--npm)';
-          btn.style.background = 'rgba(203, 56, 55, 0.1)';
-        } else {
-          btn.textContent = 'All up to date';
-        }
-      } catch (err) {
-        btn.textContent = 'Failed — retry';
-        btn.disabled = false;
-        btn.classList.remove('loading');
+          })
+          .join("");
       }
-    }
 
-    // Events
-    document.getElementById('search').addEventListener('input', (e) => {
-      searchQuery = e.target.value;
-      renderTable();
-    });
+      function escapeHtml(str) {
+        const div = document.createElement("div");
+        div.textContent = str;
+        return div.innerHTML;
+      }
 
-    document.querySelector('.controls').addEventListener('click', (e) => {
-      if (!e.target.classList.contains('filter-btn')) return;
-      document.querySelectorAll('.filter-btn').forEach(b => b.classList.remove('active'));
-      e.target.classList.add('active');
-      activeFilter = e.target.dataset.filter;
-      renderTable();
-    });
+      // Check for updates
+      async function checkForUpdates() {
+        const btn = document.getElementById("check-updates-btn");
+        btn.disabled = true;
+        btn.classList.add("loading");
+        btn.textContent = "Checking...";
 
-    document.getElementById('check-updates-btn').addEventListener('click', checkForUpdates);
+        try {
+          const res = await fetch("/api/outdated");
+          const enriched = await res.json();
 
-    document.querySelectorAll('.packages-table th.sortable').forEach(th => {
-      th.addEventListener('click', () => {
-        const field = th.dataset.sort;
-        if (sortField === field) {
-          sortDir = sortDir === 'asc' ? 'desc' : 'asc';
-        } else {
-          sortField = field;
-          sortDir = field === 'size' ? 'desc' : 'asc';
+          if (enriched.error) {
+            btn.textContent = "Failed — retry";
+            btn.disabled = false;
+            btn.classList.remove("loading");
+            return;
+          }
+
+          enriched.forEach((ep) => {
+            const pkg = packages.find(
+              (p) => p.name === ep.name && p.manager === ep.manager,
+            );
+            if (pkg) {
+              pkg.latest = ep.latest;
+            }
+          });
+
+          toggleLatestColumn(true);
+          renderStats();
+          renderTable();
+
+          const outdatedCount = packages.filter(
+            (p) => p.latest && p.version !== p.latest,
+          ).length;
+          btn.classList.remove("loading");
+          if (outdatedCount > 0) {
+            btn.textContent = `${outdatedCount} outdated`;
+            btn.style.borderColor = "var(--npm)";
+            btn.style.color = "var(--npm)";
+            btn.style.background = "rgba(203, 56, 55, 0.1)";
+          } else {
+            btn.textContent = "All up to date";
+          }
+        } catch (err) {
+          btn.textContent = "Failed — retry";
+          btn.disabled = false;
+          btn.classList.remove("loading");
         }
+      }
+
+      // Events
+      document.getElementById("search").addEventListener("input", (e) => {
+        searchQuery = e.target.value;
         renderTable();
       });
-    });
 
-    // Timestamp
-    document.getElementById('timestamp').textContent =
-      new Date(generatedAt).toLocaleString();
+      document.querySelector(".controls").addEventListener("click", (e) => {
+        if (!e.target.classList.contains("filter-btn")) return;
+        document
+          .querySelectorAll(".filter-btn")
+          .forEach((b) => b.classList.remove("active"));
+        e.target.classList.add("active");
+        activeFilter = e.target.dataset.filter;
+        renderTable();
+      });
 
-    // Init
-    renderStats();
-    renderFilters();
+      document
+        .getElementById("check-updates-btn")
+        .addEventListener("click", checkForUpdates);
 
-    // If outdated data was pre-loaded (globox -d -o), show it immediately
-    if (outdatedPreloaded && packages.some(p => p.latest)) {
-      toggleLatestColumn(true);
-      const btn = document.getElementById('check-updates-btn');
-      const outdatedCount = packages.filter(p => p.latest && p.version !== p.latest).length;
-      if (outdatedCount > 0) {
-        btn.textContent = `${outdatedCount} outdated`;
-        btn.style.borderColor = 'var(--npm)';
-        btn.style.color = 'var(--npm)';
-        btn.style.background = 'rgba(203, 56, 55, 0.1)';
-      } else {
-        btn.textContent = 'All up to date';
+      document.querySelectorAll(".packages-table th.sortable").forEach((th) => {
+        th.addEventListener("click", () => {
+          const field = th.dataset.sort;
+          if (sortField === field) {
+            sortDir = sortDir === "asc" ? "desc" : "asc";
+          } else {
+            sortField = field;
+            sortDir = field === "size" ? "desc" : "asc";
+          }
+          renderTable();
+        });
+      });
+
+      // Timestamp
+      document.getElementById("timestamp").textContent = new Date(
+        generatedAt,
+      ).toLocaleString();
+
+      // Init
+      renderStats();
+      renderFilters();
+
+      // If outdated data was pre-loaded (globox -d -o), show it immediately
+      if (outdatedPreloaded && packages.some((p) => p.latest)) {
+        toggleLatestColumn(true);
+        const btn = document.getElementById("check-updates-btn");
+        const outdatedCount = packages.filter(
+          (p) => p.latest && p.version !== p.latest,
+        ).length;
+        if (outdatedCount > 0) {
+          btn.textContent = `${outdatedCount} outdated`;
+          btn.style.borderColor = "var(--npm)";
+          btn.style.color = "var(--npm)";
+          btn.style.background = "rgba(203, 56, 55, 0.1)";
+        } else {
+          btn.textContent = "All up to date";
+        }
       }
-    }
 
-    renderTable();
-  </script>
-</body>
+      renderTable();
+    </script>
+  </body>
 </html>
